@@ -1,49 +1,39 @@
 import React, { createRef, useEffect } from "react";
-import Shapes from "../3d/shapes";
 import * as THREE from "three";
+import { ShapesController } from "./api/ShapesController";
+import { descriptions } from "./api/ShapesDesctiprion";
 
 export default function HomePage() {
   const ref = createRef();
-  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
 
-  let renderer;
-
-  const scene = new THREE.Scene();
-
-  function customScene() {
-    scene.background = new THREE.Color("white");
-  }
-  function insertShapes(shapes) {
-    for (let shape of shapes) {
-      scene.add(shape);
-    }
-  }
-
-  function render() {
+  useEffect(() => {
     if (ref.current) {
-      renderer = new THREE.WebGLRenderer({ antialias: true });
-      renderer.setSize(ref.current.clientWidth, ref.current.clientHeight);
+      const { clientHeight, clientWidth } = ref.current;
+      ShapesController.Renderer = {
+        width: clientWidth,
+        height: clientHeight
+      };
+      ref.current.appendChild(ShapesController.Renderer.domElement);
 
-      const axes = Shapes.Axes();
-      const cube = Shapes.Cube();
-      const sphere = Shapes.Sphere();
-      const flat = Shapes.Flat();
+      ShapesController.createScene();
+      ShapesController.customizeScene(
+        (scene) => (scene.background = new THREE.Color("white"))
+      );
 
-      ref.current.appendChild(renderer.domElement);
+      ShapesController.Camera = {
+        width: clientWidth,
+        height: clientHeight
+      };
+      ShapesController.CameraPosition = {
+        x: -30,
+        y: 40,
+        z: 30
+      };
 
-      camera.position.x = 5;
-      camera.position.z = 5;
-      camera.position.y = 15;
-      camera.lookAt(scene.position);
-
-      customScene();
-      insertShapes([cube, sphere, axes, flat]);
-
-      renderer.render(scene, camera);
+      ShapesController.GenerateShapes(descriptions);
+      ShapesController.Render();
     }
-  }
-
-  useEffect(render, [ref.current]);
+  }, [ref.current]);
 
   return <div className="container" ref={ref}></div>;
 }
