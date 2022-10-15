@@ -21,7 +21,6 @@ export class ShapesFabric {
         break;
     }
 
-    // shapeProto.Material = new THREE.MeshLambertMaterial(material);
     shapeProto.Material = new THREE.MeshBasicMaterial(material)
     shapeProto.Position = position;
     shapeProto.Rotation = rotation;
