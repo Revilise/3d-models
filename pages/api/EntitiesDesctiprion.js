@@ -6,7 +6,6 @@ export const descriptions = [
     geometry: [4, 4, 4],
     material: {
       color: 0xff0000,
-      wireframe: true
     },
     position: {
       x: -4,
@@ -19,7 +18,6 @@ export const descriptions = [
     geometry: [4, 20, 20],
     material: {
       color: 0x7777ff,
-      wireframe: true
     },
     position: {
       x: 20,
@@ -41,3 +39,11 @@ export const descriptions = [
     rotation: -0.5 * Math.PI
   }
 ];
+
+export const spotLight = {
+  position: [-40, 60, -10],
+  color: 0xFFFFFF,
+  mapSize: {
+    width: 2012, height: 2012
+  }
+}

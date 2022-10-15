@@ -39,23 +39,42 @@ export class ShapesController {
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setClearColor(new THREE.Color(color));
     renderer.setSize(width, height);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     ShapesController.renderer = renderer;
   }
 
-  static Render() {
+  static Render({animation}) {
     const { scene, camera, renderer } = ShapesController;
-    renderer.render(scene, camera);
+    (function animate() {
+      if (animation) {
+        animation();
+        requestAnimationFrame(animate);
+      }
+      renderer.render(scene, camera);
+    })()
   }
 
   static GenerateShapes(descriptions) {
     for (let shape of descriptions) {
-      ShapesController.AttachShape(ShapesFabric.create(shape));
+      ShapesController.AttachEntity(ShapesFabric.create(shape));
     }
   }
 
-  static AttachShape(value) {
+  static findShape(id) {
+    return ShapesController.shapes[id];
+  }
+  static AttachEntity(value) {
     ShapesController.shapes.push(value);
     ShapesController.scene.add(value);
+  }
+  static CreateSpotLight({position, color, mapSize}) {
+    const spotLight = new THREE.SpotLight(color);
+    spotLight.position.set(...position);
+    spotLight.shadow.mapSize.width = mapSize.width;
+    spotLight.shadow.mapSize.height = mapSize.height;
+    spotLight.castShadow = true;
+    return spotLight;
   }
 }

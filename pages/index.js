@@ -1,10 +1,25 @@
 import React, { createRef, useEffect } from "react";
 import * as THREE from "three";
 import { ShapesController } from "./api/ShapesController";
-import { descriptions } from "./api/ShapesDesctiprion";
+import { descriptions, spotLight } from "./api/EntitiesDesctiprion";
 
 export default function HomePage() {
   const ref = createRef();
+
+  let step = 0;
+  function animation() {
+    const {findShape} = ShapesController;
+    const cube = findShape(0);
+    const sphere = findShape(1);
+
+    cube.rotation.x += 0.02;
+    cube.rotation.y += 0.02;
+    cube.rotation.z += 0.02;
+
+    step += 0.05;
+    sphere.position.x = 20 + (10 * Math.cos(step));
+    sphere.position.y = 2 + (10 * Math.abs(Math.sin(step)));
+  }
 
   useEffect(() => {
     if (ref.current) {
@@ -32,10 +47,13 @@ export default function HomePage() {
       };
 
       ShapesController.GenerateShapes(descriptions);
-      ShapesController.AttachShape(
+      ShapesController.AttachEntity(
           new THREE.AxesHelper(20)
       );
-      ShapesController.Render();
+      ShapesController.AttachEntity(
+          ShapesController.CreateSpotLight(spotLight)
+      )
+      ShapesController.Render({animation});
     }
   }, [ref.current]);
 
