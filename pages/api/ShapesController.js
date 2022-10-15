@@ -24,7 +24,6 @@ export class ShapesController {
   }
 
   static set Camera({ width, height }) {
-    console.log(width, height);
     ShapesController.camera = new THREE.PerspectiveCamera(
       45,
       width / height,
@@ -36,8 +35,9 @@ export class ShapesController {
   static get Renderer() {
     return ShapesController.renderer;
   }
-  static set Renderer({ width, height }) {
+  static set Renderer({ width, height, color }) {
     const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setClearColor(new THREE.Color(color));
     renderer.setSize(width, height);
 
     ShapesController.renderer = renderer;

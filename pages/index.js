@@ -11,7 +11,8 @@ export default function HomePage() {
       const { clientHeight, clientWidth } = ref.current;
       ShapesController.Renderer = {
         width: clientWidth,
-        height: clientHeight
+        height: clientHeight,
+        color: 0xEEEEEE
       };
       ref.current.appendChild(ShapesController.Renderer.domElement);
 
@@ -31,9 +32,12 @@ export default function HomePage() {
       };
 
       ShapesController.GenerateShapes(descriptions);
+      ShapesController.AttachShape(
+          new THREE.AxesHelper(20)
+      );
       ShapesController.Render();
     }
   }, [ref.current]);
 
-  return <div className="container" ref={ref}></div>;
+  return <div className="container" ref={ref}/>;
 }
