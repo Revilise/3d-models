@@ -19,6 +19,8 @@ export class ShapeProto {
     if (this.rotation) {
       shape.rotation.x = this.rotation;
     }
+    shape.receiveShadow = true;
+    shape.castShadow = true;
     shape.position.x = this.position.x;
     shape.position.y = this.position.y;
     shape.position.z = this.position.z;
